@@ -4,7 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 public class SnowBall : MonoBehaviour
 {
-    TeamType teamType;
+    public TeamType teamType;
 
 
     PhotonView PV;
@@ -23,24 +23,38 @@ public class SnowBall : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if(transform.position.y < -10)
+        {
+            DestroySnowball();
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if(collision.transform.tag == "Player")
         {
             PlayerController _player = collision.gameObject.GetComponent<PlayerController>();
-            _player.getHit();
-            if (_player.teamType != teamType)
+            
+            if (_player.GetTeam() != teamType)
             {
-                
+                _player.getHit();
             }
             
         }
 
-        if(PV.IsMine)
+        DestroySnowball();
+
+
+
+    }
+
+    private void DestroySnowball()
+    {
+        if (PV.IsMine)
         {
             PhotonNetwork.Destroy(gameObject);
         }
-        
-
     }
 }

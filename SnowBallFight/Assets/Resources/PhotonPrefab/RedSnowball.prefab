@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 2103314311312051074}
   - component: {fileID: 9022103536427885133}
   m_Layer: 0
-  m_Name: SnowBall
+  m_Name: RedSnowball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -111,6 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b0a2f5d302a6ec49ac9bf1bd3cd6ffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  teamType: 0
 --- !u!114 &3145663091922889981
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -462,7 +462,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3196898974789801213}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.081, z: 0.044}
+  m_LocalPosition: {x: 0, y: -1.08, z: 0.044}
   m_LocalScale: {x: 0.4, y: 0.1, z: 0.4}
   m_Children: []
   m_Father: {fileID: 9002627683695175947}
@@ -484,7 +484,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3196898974789801213}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -681,7 +681,7 @@ SkinnedMeshRenderer:
   - {fileID: 1554749329653875266, guid: 15a0ae0873fcfc145a0cf31ab8b2de9d, type: 3}
   - {fileID: -3756890135804285538, guid: 15a0ae0873fcfc145a0cf31ab8b2de9d, type: 3}
   - {fileID: -7966459918177931705, guid: 15a0ae0873fcfc145a0cf31ab8b2de9d, type: 3}
-  - {fileID: -1414982685445645586, guid: 15a0ae0873fcfc145a0cf31ab8b2de9d, type: 3}
+  - {fileID: 2100000, guid: 16bc8d56d83a73a469c853341566be18, type: 2}
   - {fileID: -2056442807908585651, guid: 15a0ae0873fcfc145a0cf31ab8b2de9d, type: 3}
   - {fileID: -7149484741758423876, guid: 15a0ae0873fcfc145a0cf31ab8b2de9d, type: 3}
   - {fileID: 1777822273904559963, guid: 15a0ae0873fcfc145a0cf31ab8b2de9d, type: 3}
@@ -1462,7 +1462,7 @@ GameObject:
   - component: {fileID: 2648083745909046783}
   - component: {fileID: 289886893198593227}
   m_Layer: 0
-  m_Name: PlayerController
+  m_Name: RedPlayerController
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
