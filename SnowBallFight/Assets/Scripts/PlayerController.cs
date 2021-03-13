@@ -21,11 +21,15 @@ public class PlayerController : MonoBehaviour
 
     PhotonView PV;
 
+    Animator animator;
+
     PlayerManager playerManager;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         PV = GetComponent<PhotonView>();
+        animator = GetComponentInChildren<Animator>();
+        
 
         playerManager = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManager>();
     }
@@ -36,12 +40,15 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
+            
+            userName.text = playerManager.userName;
         }
         else
         {
-            //Destroy(userName);
+            GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+            userName.text = "";
         }
-        userName.text = playerManager.userName;
+        
     }
 
     private void Update()
@@ -70,6 +77,16 @@ public class PlayerController : MonoBehaviour
         if(Cursor.lockState == CursorLockMode.Locked)
         {
             rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
+            bool walkState;
+            if (moveAmount.z > 0.5)
+            {
+                walkState = true;
+            }
+            else
+            {
+                walkState = false;
+            }
+            PV.RPC("WalkAnimmation", RpcTarget.All, walkState);
         }
         
     }
@@ -78,19 +95,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            GameObject _snowBall;
-            if (playerManager.teamType == TeamType.BlueTeam)
-            {
-                _snowBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefab", "BlueSnowball"), snowBallholder.transform.position, snowBallholder.transform.rotation);
-                
-            }
-            else
-            {
-                _snowBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefab", "RedSnowball"), snowBallholder.transform.position, snowBallholder.transform.rotation);
-            }
-            
-            Rigidbody _snowBallRb = _snowBall.GetComponent<Rigidbody>();
-            _snowBallRb.AddForce(cameraholder.transform.forward * throwForce);
+            PV.RPC("ShootAnimation", RpcTarget.All);
         }
     }
     void Move()
@@ -133,11 +138,31 @@ public class PlayerController : MonoBehaviour
         return playerManager.teamType;
     }
 
+    public void SendSnowball()
+    {
+        if(PV.IsMine)
+        {
+            GameObject _snowBall;
+            if (playerManager.teamType == TeamType.BlueTeam)
+            {
+                _snowBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefab", "BlueSnowball"), snowBallholder.transform.position, snowBallholder.transform.rotation);
+
+            }
+            else
+            {
+                _snowBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefab", "RedSnowball"), snowBallholder.transform.position, snowBallholder.transform.rotation);
+            }
+
+            Rigidbody _snowBallRb = _snowBall.GetComponent<Rigidbody>();
+            _snowBallRb.AddForce(cameraholder.transform.forward * throwForce);
+        }
+        
+    }
+
     [PunRPC]
     void RPC_TakeDamage()
     {
-        if (!PV.IsMine)
-            return;
+        if (!PV.IsMine) return;
 
         Die();
     }
@@ -145,5 +170,21 @@ public class PlayerController : MonoBehaviour
     void Die()
     {
         playerManager.Die();
+    }
+
+    [PunRPC]
+    void WalkAnimmation(bool walkState)
+    {
+
+        if(animator.GetBool("Walk") != walkState)
+        {
+            animator.SetBool("Walk", walkState);
+        }
+    }
+
+    [PunRPC]
+    void ShootAnimation()
+    {
+        animator.SetTrigger("Shoot");
     }
 }

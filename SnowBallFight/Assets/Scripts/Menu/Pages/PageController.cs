@@ -15,7 +15,7 @@ namespace GameplayCore
             private List<Page> m_OnList;
             private List<Page> m_OffList;
 
-            private PageType activePageType = PageType.none;
+            public PageType activePageType = PageType.none;
 
             private void Awake()
             {

@@ -7,7 +7,7 @@ using Photon.Realtime;
 
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
-    public TeamType teamType; 
+    public TeamType teamType = TeamType.BlueTeam; 
     PhotonView PV;
     GameObject controller;
 
@@ -28,7 +28,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             redTeamSpawn = GameObject.FindGameObjectsWithTag("redTeamSpawn");
             blueTeamSpawn = GameObject.FindGameObjectsWithTag("blueTeamSpawn");
 
-            ChangeTeamMenu.Instance.FirstOpen(this);
+            PauseMenu.Instance.FirstOpen(this);
         }
     }
 

@@ -13,7 +13,9 @@ namespace GameplayCore
             CreateRoom,
             FindRoom,
             Lobby,
-            ErrorMenu
+            ErrorMenu,
+            ChangeTeamMenu,
+            PauseMenu
         }
     }
 }
