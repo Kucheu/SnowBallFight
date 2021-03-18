@@ -38,6 +38,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
         {
              GameObject playerManager = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefab", "PlayerManager"),Vector3.zero, Quaternion.identity);
             playerManager.GetComponent<PlayerManager>().SetUserName(PhotonNetwork.NickName);
+
+            if(PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefab", "Score"),Vector3.zero,Quaternion.identity);
+            }
         }
     }
 

@@ -142,15 +142,19 @@ public class PlayerController : MonoBehaviour
     {
         if(PV.IsMine)
         {
+            object[] data = new object[1];
+
+            data[0] = playerManager.PV.ViewID;
+            
             GameObject _snowBall;
             if (playerManager.teamType == TeamType.BlueTeam)
             {
-                _snowBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefab", "BlueSnowball"), snowBallholder.transform.position, snowBallholder.transform.rotation);
+                _snowBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefab", "BlueSnowball"), snowBallholder.transform.position, snowBallholder.transform.rotation,0,data);
 
             }
             else
             {
-                _snowBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefab", "RedSnowball"), snowBallholder.transform.position, snowBallholder.transform.rotation);
+                _snowBall = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefab", "RedSnowball"), snowBallholder.transform.position, snowBallholder.transform.rotation, 0, data);
             }
 
             Rigidbody _snowBallRb = _snowBall.GetComponent<Rigidbody>();

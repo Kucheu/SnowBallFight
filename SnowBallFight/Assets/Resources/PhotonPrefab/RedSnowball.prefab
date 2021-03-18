@@ -112,6 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamType: 0
+  snowballOwner: {fileID: 0}
 --- !u!114 &3145663091922889981
 MonoBehaviour:
   m_ObjectHideFlags: 0

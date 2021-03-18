@@ -5,14 +5,17 @@ using Photon.Pun;
 public class SnowBall : MonoBehaviour
 {
     public TeamType teamType;
-
+    public PlayerManager snowballOwner;
 
     PhotonView PV;
     Rigidbody rb;
+    Score score;
+
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
         rb = GetComponent<Rigidbody>();
+        score = FindObjectOfType<Score>();
     }
 
     private void Start()
@@ -21,6 +24,10 @@ public class SnowBall : MonoBehaviour
         {
             Destroy(rb);
         }
+
+        object[] data = PV.InstantiationData;
+        int snowballOwnerID = (int)data[0];
+        snowballOwner = PhotonView.Find(snowballOwnerID).gameObject.GetComponent<PlayerManager>();
     }
 
     private void Update()
@@ -40,6 +47,8 @@ public class SnowBall : MonoBehaviour
             if (_player.GetTeam() != teamType)
             {
                 _player.getHit();
+                score.AddPoint(teamType);
+                snowballOwner.GetKill();
             }
             
         }

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GameplayCore.Menu;
-public class PauseMenu : MonoBehaviour
+using Photon.Pun;
+public class PauseMenu : MonoBehaviourPunCallbacks
 {
 
     public static PauseMenu Instance;
@@ -98,4 +99,23 @@ public class PauseMenu : MonoBehaviour
         CloseMenu();
         PageController.Instance.TurnPageOff(PageType.ChangeTeamMenu);
     }
+
+    public void Resume()
+    {
+        PageController.Instance.TurnPageOff(PageController.Instance.activePageType);
+        CloseMenu();
+    }
+
+    public void QuitToMenu()
+    {
+        PhotonNetwork.LeaveRoom();
+        
+    }
+
+    public override void  OnLeftRoom()
+    {
+        Destroy(FindObjectOfType<RoomManager>().gameObject);
+        PhotonNetwork.LoadLevel(0);
+    }
+    
 }

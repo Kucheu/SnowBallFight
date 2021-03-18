@@ -8,13 +8,15 @@ using Photon.Realtime;
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
     public TeamType teamType = TeamType.BlueTeam; 
-    PhotonView PV;
+    public PhotonView PV;
     GameObject controller;
 
     GameObject[] redTeamSpawn;
     GameObject[] blueTeamSpawn;
 
     public string userName;
+    public int kills;
+    public int deaths;
 
     void Awake()
     {
@@ -67,20 +69,30 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         //PhotonNetwork.Destroy(controller);
 
         //Trigger death animation
+        
         CreateController(teamType);
+
+        if (!PV.IsMine) return;
+
+        deaths++;
+        ExitGames.Client.Photon.Hashtable hasz = new ExitGames.Client.Photon.Hashtable();
+        hasz.Add("deaths", deaths);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hasz);
     }
 
     public void ChangeTeam(TeamType _teamType)
     {
         
-        CreateController(_teamType);
+        
         if (PV.IsMine)
         {
             ExitGames.Client.Photon.Hashtable hasz = new ExitGames.Client.Photon.Hashtable();
             hasz.Add("teamType", _teamType);
             PhotonNetwork.LocalPlayer.SetCustomProperties(hasz);
         }
-        
+
+        CreateController(_teamType);
+
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
@@ -94,6 +106,16 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         {
             SetUserName((string)changedProps["userName"]);
         }
+
+        if(!PV.IsMine && targetPlayer == PV.Owner && changedProps.ContainsKey("kills"))
+        {
+            SetKills((int)changedProps["kills"]);
+        }
+
+        if (!PV.IsMine && targetPlayer == PV.Owner && changedProps.ContainsKey("deaths"))
+        {
+            SetDeaths((int)changedProps["deaths"]);
+        }
     }
 
     public void SetUserName(string _userName)
@@ -106,5 +128,25 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             PhotonNetwork.LocalPlayer.SetCustomProperties(hasz);
         }
         userName = _userName;
+    }
+
+    public void GetKill()
+    {
+        if (!PV.IsMine) return;
+
+        kills++;
+        ExitGames.Client.Photon.Hashtable hasz = new ExitGames.Client.Photon.Hashtable();
+        hasz.Add("kills", kills);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hasz);
+    }
+
+    void SetKills(int _kills)
+    {
+        kills = _kills;
+    }
+
+    void  SetDeaths(int _deadhs)
+    {
+        deaths = _deadhs;
     }
 }
