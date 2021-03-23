@@ -6,16 +6,24 @@ public class SnowBall : MonoBehaviour
 {
     public TeamType teamType;
     public PlayerManager snowballOwner;
+    public AudioClip audioDestroySnowball;
+
 
     PhotonView PV;
     Rigidbody rb;
     Score score;
+    AudioSource audioSource;
+    MeshRenderer meshRenderer;
+    Collider SnowballCollider;
 
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
         rb = GetComponent<Rigidbody>();
         score = FindObjectOfType<Score>();
+        audioSource = GetComponent<AudioSource>();
+        meshRenderer = GetComponent<MeshRenderer>();
+        SnowballCollider = GetComponent<Collider>();
     }
 
     private void Start()
@@ -34,7 +42,7 @@ public class SnowBall : MonoBehaviour
     {
         if(transform.position.y < -10)
         {
-            DestroySnowball();
+            StartCoroutine(DestroySnowball());
         }
     }
 
@@ -49,21 +57,36 @@ public class SnowBall : MonoBehaviour
                 _player.getHit();
                 score.AddPoint(teamType);
                 snowballOwner.GetKill();
+                PV.RPC("KillInfo", RpcTarget.All, snowballOwner.userName, _player.playerManager.userName);
             }
             
         }
 
-        DestroySnowball();
+        StartCoroutine(DestroySnowball());
 
 
 
     }
 
-    private void DestroySnowball()
+    private IEnumerator DestroySnowball()
     {
+        meshRenderer.enabled = false;
+        SnowballCollider.enabled = false;
+        if(!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(audioDestroySnowball);
+        }
+        yield return new WaitForSeconds(audioDestroySnowball.length);
+
         if (PV.IsMine)
         {
             PhotonNetwork.Destroy(gameObject);
         }
+    }
+
+    [PunRPC]
+    public void KillInfo(string whoKill, string whoDead)
+    {
+        FindObjectOfType<KillFeed>().SendKillInfo(whoDead, "snowball", whoKill);
     }
 }

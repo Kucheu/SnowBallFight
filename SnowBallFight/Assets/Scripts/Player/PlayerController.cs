@@ -12,28 +12,24 @@ public class PlayerController : MonoBehaviour
     
     [SerializeField] TMP_Text userName;
 
+    [SerializeField] AudioSource audioSource;
     float verticalLookRoattion;
     public bool grounded;
     Vector3 smoothMoveVelocity;
     Vector3 moveAmount;
 
     Rigidbody rb;
-
     PhotonView PV;
-
     Animator animator;
-
-    PlayerManager playerManager;
+    public PlayerManager playerManager;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         PV = GetComponent<PhotonView>();
         animator = GetComponentInChildren<Animator>();
-        
 
         playerManager = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManager>();
     }
-
     public void Start()
     {
         if(!PV.IsMine)
@@ -183,6 +179,18 @@ public class PlayerController : MonoBehaviour
         if(animator.GetBool("Walk") != walkState)
         {
             animator.SetBool("Walk", walkState);
+        }
+
+        if(walkState)
+        {
+            if(!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
+        }
+        else
+        {
+            audioSource.Stop();
         }
     }
 
